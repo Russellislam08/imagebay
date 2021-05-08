@@ -5,7 +5,6 @@ var express = require("express"),
   mongoose = require("mongoose"),
   flash = require("connect-flash"),
   Image= require("./models/image"),
-  Comment = require("./models/comment"),
   User = require("./models/user"),
   passport = require("passport"),
   LocalStrategy = require("passport-local"),
@@ -55,7 +54,6 @@ app.use(function (req, res, next) {
 });
 
 app.use("/images", imageRoutes);
-app.use("/campgrounds/:id/comments", commentRoutes);
 app.use("/", indexRoutes);
 
 const port = process.env.PORT || 5000;
