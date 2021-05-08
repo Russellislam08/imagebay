@@ -57,7 +57,8 @@ app.use("/images", imageRoutes);
 app.use("/", indexRoutes);
 
 const port = process.env.PORT || 5000;
-const ip = process.env.IP || "localhost";
+// const ip = process.env.IP || "localhost";
+const ip = "0.0.0.0";
 
 app.listen(port, ip, function () {
   console.log("Image Bay server has started...");
