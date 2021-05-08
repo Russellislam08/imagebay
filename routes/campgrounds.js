@@ -52,7 +52,7 @@ router.get("/", middleware.isLoggedIn, function (req, res) {
       if (err) {
         console.log(err);
       } else {
-        res.render("campgrounds/campgrounds", { campgrounds: allCampgrounds });
+        res.render("image/images", { campgrounds: allCampgrounds });
       }
     }
   );
@@ -113,7 +113,7 @@ router.post(
 
 //NEW - show form to create new campground
 router.get("/new", middleware.isLoggedIn, function (req, res) {
-  res.render("campgrounds/new");
+  res.render("image/new");
 });
 
 // SHOW - shows more info about one campground
@@ -127,7 +127,7 @@ router.get("/:id", function (req, res) {
       } else {
         console.log(foundCampground);
         //render show template with that campground
-        res.render("campgrounds/show", { campground: foundCampground });
+        res.render("image/show", { campground: foundCampground });
       }
     });
 });
@@ -140,7 +140,7 @@ router.get(
     //Check if user is logged in
     Campground.findById(req.params.id, function (err, foundCampground) {
       console.log(foundCampground);
-      res.render("campgrounds/edit", { campground: foundCampground });
+      res.render("image/edit", { campground: foundCampground });
     });
   }
 );
