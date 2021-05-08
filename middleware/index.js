@@ -2,7 +2,7 @@ var Image = require("../models/image");
 var Comment = require("../models/comment");
 var middlewareObj = {};
 
-middlewareObj.checkCampgroundOwnership = function(req, res, next){
+middlewareObj.checkImageOwnership= function(req, res, next){
         if(req.isAuthenticated()){
          Image.findById(req.params.id, function(err, foundImage){
             if(err){

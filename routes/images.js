@@ -135,7 +135,7 @@ router.get("/:id", function (req, res) {
 //Edit route
 router.get(
   "/:id/edit",
-  middleware.checkCampgroundOwnership,
+  middleware.checkImageOwnership,
   function (req, res) {
     //Check if user is logged in
     Image.findById(req.params.id, function (err, foundImage) {
@@ -146,7 +146,7 @@ router.get(
 );
 
 //Update Route
-router.put("/:id", middleware.checkCampgroundOwnership, function (req, res) {
+router.put("/:id", middleware.checkImageOwnership, function (req, res) {
   Image.findByIdAndUpdate(
     req.params.id,
     req.body.campground,
@@ -161,7 +161,7 @@ router.put("/:id", middleware.checkCampgroundOwnership, function (req, res) {
 });
 
 // Delete image
-router.delete("/:id", middleware.checkCampgroundOwnership, function (req, res) {
+router.delete("/:id", middleware.checkImageOwnership, function (req, res) {
   Image.findById(req.params.id, async (error, response) => {
     if (error) {
       console.log("ERROR");

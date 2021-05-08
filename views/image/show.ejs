@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-md-3">
       <button class="lead btn btn-lg">
-        <a href="/campgrounds" style="text-decoration: none">Back to Images</a>
+        <a href="/images" style="text-decoration: none">Back to Images</a>
       </button>
     </div>
     <div class="col-md-9">
@@ -19,13 +19,13 @@
           <% if(currentUser && campground.author.id.equals(currentUser._id)) {
           %>
           <button class="btn btn-warning editButton">
-            <a id="editButton" href="/campgrounds/<%= campground._id %>/edit"
+            <a id="editButton" href="/images/<%= campground._id %>/edit"
               >Edit</a
             >
           </button>
           <form
             id="delete-form"
-            action="/campgrounds/<%= campground._id %>?_method=DELETE"
+            action="/images/<%= campground._id %>?_method=DELETE"
             method="POST"
           >
             <button class="btn btn-danger">Delete</button>
