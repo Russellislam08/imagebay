@@ -2,19 +2,23 @@ var express = require("express");
 var router = express.Router();
 var Campground = require("../models/campground");
 var middleware = require("../middleware");
+
 const path = require("path");
 const multer = require("multer");
 const multers3 = require("multer-s3");
 const config = require("config");
+const fs = require("fs");
+const util = require("util");
 const S3 = require("aws-sdk/clients/s3");
-const { uploadFile } = require("../s3");
+const { uploadFile, deleteFile } = require("../s3");
 
 const s3 = new S3(config.get("awsS3"));
+const unlinkFile = util.promisify(fs.unlink);
 
 const User = require("../models/user");
 
 const storage = multer.diskStorage({
-  destination: "./public/uploads/",
+  destination: "./",
   filename: function (req, file, cb) {
     cb(
       null,
@@ -62,24 +66,11 @@ router.post(
     // get data from form and add to campgrounds array
     // upload image to s3
 
-    const s3Config = config.get("awsS3");
-    const s3Bucket = config.get("s3Bucket");
-
-    console.log("S3 config is: ");
-    console.log(s3Config);
-    console.log(s3Bucket);
-
     const userID = req.user._id;
     const result = await uploadFile(req.file);
+
     const imageKey = result.Key;
     const imageUrl = result.Location;
-
-    console.log("FILE IS");
-
-    const imageObj = {
-      url: imageUrl,
-      key: imageKey,
-    };
 
     // find user and update images
     User.findOne({ _id: userID }, (error, response) => {
@@ -97,18 +88,21 @@ router.post(
         var newCampground = {
           name: name,
           image: image,
+          imageKey: imageKey,
           description: desc,
           author: author,
           price: price,
         };
 
         // Create a new campground and save to DB
-        Campground.create(newCampground, function (err, newlyCreated) {
+        Campground.create(newCampground, async function (err, newlyCreated) {
           if (err) {
             console.log(err);
+            await unlinkFile(req.file.path);
           } else {
             //redirect back to campgrounds page
             console.log(newlyCreated);
+            await unlinkFile(req.file.path);
             res.redirect("/campgrounds");
           }
         });
@@ -153,7 +147,6 @@ router.get(
 
 //Update Route
 router.put("/:id", middleware.checkCampgroundOwnership, function (req, res) {
-  //Find and update the correct campground
   Campground.findByIdAndUpdate(
     req.params.id,
     req.body.campground,
@@ -167,11 +160,24 @@ router.put("/:id", middleware.checkCampgroundOwnership, function (req, res) {
   //
 });
 
-//Destroy Campground Route
+// Delete image
 router.delete("/:id", middleware.checkCampgroundOwnership, function (req, res) {
-  Campground.findByIdAndRemove(req.params.id, function (err) {
-    if (err) res.redirect("/campgrounds");
-    else res.redirect("/campgrounds");
+  Campground.findById(req.params.id, async (error, response) => {
+    if (error) {
+      console.log("ERROR");
+      console.log(error);
+      res.redirect("/campgrounds");
+    } else {
+      console.log("ELSE HAPPEND, AND RESULT IS: ");
+      console.log(response);
+
+      const result = await deleteFile(response.imageKey);
+
+      Campground.deleteOne({ _id: req.params.id }, (err) => {
+        if (err) res.redirect("/campgrounds");
+        else res.redirect("/campgrounds");
+      });
+    }
   });
 });
 
