@@ -2,9 +2,21 @@
 <div class="container">
   <div class="row">
     <div class="col-md-3">
-      <button class="lead btn btn-lg">
-        <a href="/images" style="text-decoration: none">Back to Images</a>
+      <hr/>
+      <a href="/images" style="color:#4d4949">
+        <button class="lead btn btn-lg">
+          Back to Your Images
+        </button>
+      </a>
+      <hr />
+      <% if(image.forSale) { %>
+      <a id="editButton" href="/images/market" style="color:#4d4949">
+      <button class="btn btn-lg btn-dark editButton">
+        Back to Marketplace
       </button>
+      </a>
+      <hr/>
+      <% }; %>
     </div>
     <div class="col-md-9">
       <div class="thumbnail">
@@ -16,7 +28,7 @@
           <h4><a><%= image.name %></a></h4>
           <p><%= image.description %></p>
           <p>
-            <em>Submitted by <%= image.author.username %></em>
+            <em>Owned by <%= image.author.username %></em>
           </p>
           <% if(currentUser && image.author.id.equals(currentUser._id)) {
           %>
