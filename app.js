@@ -60,5 +60,5 @@ const port = process.env.PORT || 5000;
 const ip = process.env.IP || "localhost";
 
 app.listen(port, ip, function () {
-  console.log("Yelpcamp server has started...");
+  console.log("Image Bay server has started...");
 });
