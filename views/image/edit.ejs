@@ -6,21 +6,24 @@
         <div style="width:30%; margin:30px auto;">
             
         <form action="/images/<%= image._id %>?_method=PUT" method="POST">
+            <img class="img-responsive" src="<%= image.image %>" />
+            <hr/>
             <div class="form-group">
                 Name
-                <input class="form-control" type="text" value = <%= image.name %> name="image[name]"/>
+                <input class="form-control" type="text" value = "<%= image.name %>"" name="image[name]" required/>
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
                 Price
                 <input class="form-control" type="number" value = <%= image.price %> name="image[price]" min="0.01" step="0.01"/>
-            </div>
+            </div> -->
             <!-- <div class="form-group">
                 <input class ="form-control" type="text" value = <%= image.image %> name="image[image]"/>
             </div> -->
             <div class="form-group">
                 Description
-                <input class ="form-control" type="text" value = <%= image.description %> name="image[description]"/>
+                <input class ="form-control" type="text" value = "<%= image.description %>" name="image[description]" required/>
             </div>
+            <hr/>
             <div class="form-group">
                 <button class="btn btn-lg btn-block btn-primary">Submit!</button>
             </div>

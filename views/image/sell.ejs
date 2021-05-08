@@ -7,6 +7,7 @@
             
         <form action="/images/sell/<%= image._id %>?_method=POST" method="POST">
             <img class="img-responsive" src="<%= image.image %>" />
+            <hr/>
             <div class="form-group">
                 Name
                 <input class="form-control" type="text" value = <%= image.name %> name="image[name]" readonly/>
@@ -22,6 +23,7 @@
                 Description
                 <input class ="form-control" type="text" value = <%= image.description %> name="image[description]" readonly/>
             </div>
+            <hr/>
             <div class="form-group">
                 <button class="btn btn-lg btn-block btn-primary">Submit!</button>
             </div>
