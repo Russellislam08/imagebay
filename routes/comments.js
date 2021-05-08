@@ -6,24 +6,22 @@ var middleware = require("../middleware");
 
 //Comments New
 router.get("/new", middleware.isLoggedIn, function(req, res){
-    // find campground by id
     console.log(req.params.id);
     Image.findById(req.params.id, function(err, foundImage){
         if(err){
             console.log(err);
         } else {
-             res.render("comments/new", {campground: foundImage});
+             res.render("comments/new", {image: foundImage});
         }
     });
 });
 
 //Comments Create
 router.post("/", middleware.isLoggedIn,function(req, res){
-   //lookup campground using ID
    Image.findById(req.params.id, function(err, foundImage){
        if(err){
            console.log(err);
-           res.redirect("/campgrounds");
+           res.redirect("/images");
        } else {
         Comment.create(req.body.comment, function(err, comment){
            if(err){
@@ -36,11 +34,11 @@ router.post("/", middleware.isLoggedIn,function(req, res){
                console.log("New comment username will be: " + req.user.username);
                //save comment
                comment.save();
-               campground.comments.push(comment);
-               campground.save();
+               foundImage.comments.push(comment);
+               foundImage.save();
                console.log(comment);
                req.flash("success", "Successfully added comment.");
-               res.redirect('/campgrounds/' + campground._id);
+               res.redirect('/images/' + foundImage._id);
            }
         });
        }

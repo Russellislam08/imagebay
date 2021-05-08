@@ -43,27 +43,27 @@ const uploadImage = multer({
 
 const upload = multer();
 
-//INDEX - show all campgrounds
+//INDEX - show all images
 router.get("/", middleware.isLoggedIn, function (req, res) {
-  // Get all campgrounds from DB
+  // Get all images from DB
   Image.find(
     { "author.id": req.user._id },
     function (err, allImages) {
       if (err) {
         console.log(err);
       } else {
-        res.render("image/images", { campgrounds: allImages});
+        res.render("image/images", { images: allImages});
       }
     }
   );
 });
 
-//CREATE - add new campground to DB
+//CREATE - add new image to DB
 router.post(
   "/",
   [middleware.isLoggedIn, uploadImage],
   async function (req, res) {
-    // get data from form and add to campgrounds array
+    // get data from form and add to images array
     // upload image to s3
 
     const userID = req.user._id;
@@ -94,13 +94,13 @@ router.post(
           price: price,
         };
 
-        // Create a new campground and save to DB
+        // Create a new image and save to DB
         Image.create(newImage, async function (err, newlyCreated) {
           if (err) {
             console.log(err);
             await unlinkFile(req.file.path);
           } else {
-            //redirect back to campgrounds page
+            //redirect back to images page
             console.log(newlyCreated);
             await unlinkFile(req.file.path);
             res.redirect("/images");
@@ -111,14 +111,14 @@ router.post(
   }
 );
 
-//NEW - show form to create new campground
+//NEW - show form to create new image
 router.get("/new", middleware.isLoggedIn, function (req, res) {
   res.render("image/new");
 });
 
-// SHOW - shows more info about one campground
+// SHOW - shows more info about one image
 router.get("/:id", function (req, res) {
-  //find the campground with provided ID
+  //find the image with provided ID
   Image.findById(req.params.id)
     .populate("comments")
     .exec(function (err, foundImage) {
@@ -126,8 +126,8 @@ router.get("/:id", function (req, res) {
         console.log(err);
       } else {
         console.log(foundImage);
-        //render show template with that campground
-        res.render("image/show", { campground: foundImage});
+        //render show template with that image
+        res.render("image/show", { image: foundImage});
       }
     });
 });
@@ -140,7 +140,7 @@ router.get(
     //Check if user is logged in
     Image.findById(req.params.id, function (err, foundImage) {
       console.log(foundImage);
-      res.render("image/edit", { campground: foundImage});
+      res.render("image/edit", { image: foundImage});
     });
   }
 );
@@ -149,7 +149,7 @@ router.get(
 router.put("/:id", middleware.checkImageOwnership, function (req, res) {
   Image.findByIdAndUpdate(
     req.params.id,
-    req.body.campground,
+    req.body.image,
     function (err, foundImage) {
       if (err) res.redirect("/images");
       else {
