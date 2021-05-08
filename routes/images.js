@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-var Campground = require("../models/campground");
+var Image = require("../models/image");
 var middleware = require("../middleware");
 
 const path = require("path");
@@ -46,13 +46,13 @@ const upload = multer();
 //INDEX - show all campgrounds
 router.get("/", middleware.isLoggedIn, function (req, res) {
   // Get all campgrounds from DB
-  Campground.find(
+  Image.find(
     { "author.id": req.user._id },
-    function (err, allCampgrounds) {
+    function (err, allImages) {
       if (err) {
         console.log(err);
       } else {
-        res.render("image/images", { campgrounds: allCampgrounds });
+        res.render("image/images", { campgrounds: allImages});
       }
     }
   );
@@ -74,7 +74,7 @@ router.post(
 
     // find user and update images
     User.findOne({ _id: userID }, (error, response) => {
-      if (error) res.status(400).redirect("/campgrounds");
+      if (error) res.status(400).redirect("/images");
       else {
         // create object
         var name = req.body.name;
@@ -85,7 +85,7 @@ router.post(
           username: req.user.username,
         };
         var price = req.body.price;
-        var newCampground = {
+        var newImage = {
           name: name,
           image: image,
           imageKey: imageKey,
@@ -95,7 +95,7 @@ router.post(
         };
 
         // Create a new campground and save to DB
-        Campground.create(newCampground, async function (err, newlyCreated) {
+        Image.create(newImage, async function (err, newlyCreated) {
           if (err) {
             console.log(err);
             await unlinkFile(req.file.path);
@@ -103,7 +103,7 @@ router.post(
             //redirect back to campgrounds page
             console.log(newlyCreated);
             await unlinkFile(req.file.path);
-            res.redirect("/campgrounds");
+            res.redirect("/images");
           }
         });
       }
@@ -119,15 +119,15 @@ router.get("/new", middleware.isLoggedIn, function (req, res) {
 // SHOW - shows more info about one campground
 router.get("/:id", function (req, res) {
   //find the campground with provided ID
-  Campground.findById(req.params.id)
+  Image.findById(req.params.id)
     .populate("comments")
-    .exec(function (err, foundCampground) {
+    .exec(function (err, foundImage) {
       if (err) {
         console.log(err);
       } else {
-        console.log(foundCampground);
+        console.log(foundImage);
         //render show template with that campground
-        res.render("image/show", { campground: foundCampground });
+        res.render("image/show", { campground: foundImage});
       }
     });
 });
@@ -138,22 +138,22 @@ router.get(
   middleware.checkCampgroundOwnership,
   function (req, res) {
     //Check if user is logged in
-    Campground.findById(req.params.id, function (err, foundCampground) {
-      console.log(foundCampground);
-      res.render("image/edit", { campground: foundCampground });
+    Image.findById(req.params.id, function (err, foundImage) {
+      console.log(foundImage);
+      res.render("image/edit", { campground: foundImage});
     });
   }
 );
 
 //Update Route
 router.put("/:id", middleware.checkCampgroundOwnership, function (req, res) {
-  Campground.findByIdAndUpdate(
+  Image.findByIdAndUpdate(
     req.params.id,
     req.body.campground,
-    function (err, foundCampground) {
-      if (err) res.redirect("/campgrounds");
+    function (err, foundImage) {
+      if (err) res.redirect("/images");
       else {
-        res.redirect("/campgrounds/" + req.params.id);
+        res.redirect("/images/" + req.params.id);
       }
     }
   );
@@ -162,20 +162,20 @@ router.put("/:id", middleware.checkCampgroundOwnership, function (req, res) {
 
 // Delete image
 router.delete("/:id", middleware.checkCampgroundOwnership, function (req, res) {
-  Campground.findById(req.params.id, async (error, response) => {
+  Image.findById(req.params.id, async (error, response) => {
     if (error) {
       console.log("ERROR");
       console.log(error);
-      res.redirect("/campgrounds");
+      res.redirect("/images");
     } else {
       console.log("ELSE HAPPEND, AND RESULT IS: ");
       console.log(response);
 
       const result = await deleteFile(response.imageKey);
 
-      Campground.deleteOne({ _id: req.params.id }, (err) => {
-        if (err) res.redirect("/campgrounds");
-        else res.redirect("/campgrounds");
+      Image.deleteOne({ _id: req.params.id }, (err) => {
+        if (err) res.redirect("/images");
+        else res.redirect("/images");
       });
     }
   });

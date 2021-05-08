@@ -4,7 +4,7 @@ var express = require("express"),
   methodOverride = require("method-override"),
   mongoose = require("mongoose"),
   flash = require("connect-flash"),
-  Campground = require("./models/campground"),
+  Image= require("./models/image"),
   Comment = require("./models/comment"),
   User = require("./models/user"),
   passport = require("passport"),
@@ -12,7 +12,7 @@ var express = require("express"),
   config = require("config");
 
 //Requiring routes
-var campgroundRoutes = require("./routes/campgrounds"),
+var imageRoutes = require("./routes/images"),
   commentRoutes = require("./routes/comments"),
   indexRoutes = require("./routes/index");
 
@@ -54,7 +54,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use("/campgrounds", campgroundRoutes);
+app.use("/images", imageRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
 app.use("/", indexRoutes);
 

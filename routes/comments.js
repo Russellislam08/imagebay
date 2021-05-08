@@ -1,6 +1,6 @@
 var express = require("express");
 var router  = express.Router({mergeParams: true});
-var Campground = require("../models/campground");
+var Image = require("../models/image");
 var Comment = require("../models/comment");
 var middleware = require("../middleware");
 
@@ -8,11 +8,11 @@ var middleware = require("../middleware");
 router.get("/new", middleware.isLoggedIn, function(req, res){
     // find campground by id
     console.log(req.params.id);
-    Campground.findById(req.params.id, function(err, campground){
+    Image.findById(req.params.id, function(err, foundImage){
         if(err){
             console.log(err);
         } else {
-             res.render("comments/new", {campground: campground});
+             res.render("comments/new", {campground: foundImage});
         }
     });
 });
@@ -20,7 +20,7 @@ router.get("/new", middleware.isLoggedIn, function(req, res){
 //Comments Create
 router.post("/", middleware.isLoggedIn,function(req, res){
    //lookup campground using ID
-   Campground.findById(req.params.id, function(err, campground){
+   Image.findById(req.params.id, function(err, foundImage){
        if(err){
            console.log(err);
            res.redirect("/campgrounds");
