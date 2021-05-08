@@ -17,9 +17,10 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  images: {
-    type: [Object],
-  },
+  balance: {
+    type: Number,
+    default: 0.00
+  }
 });
 
 UserSchema.plugin(passportLocalMongoose);

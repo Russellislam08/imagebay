@@ -44,18 +44,85 @@ const uploadImage = multer({
 const upload = multer();
 
 //INDEX - show all images
+
+router.get("/market", middleware.isLoggedIn, (req, res) => {
+  Image.find({}, function (err, allImages) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("image/market", { images: allImages });
+    }
+  });
+})
+
+router.post("/buy/:id", middleware.isLoggedIn, (req, res) => {
+  // get current user
+  // check if they have balance
+  const userID = req.user._id;
+  User.findById(userID, (uError, user) => {
+    if (uError) res.redirect("/images")
+
+    // find image
+    Image.findById(req.params.id, (iError, image) => {
+      // check balance
+      if (user.balance < image.price) {
+        req.flash ("error", "Not enough money for this image.")
+        res.redirect("/images/"+req.params.id)
+
+      } else {
+
+        const oldAuthor = image.author.id;
+        const newBalance = user.balance - image.price;
+        const newAuthor = {id: userID, username: user.username}
+
+        Image.findByIdAndUpdate(image._id, {author: newAuthor, forSale: false}, (err, resp) => {
+          if (err) {
+            req.flash("error", err)
+            res.redirect("/images/")
+          } else {
+            User.findByIdAndUpdate(userID, {balance: newBalance}, (err2, resp2) => {
+              if (err2) {
+                req.flash("error", err2)
+                res.redirect("/images/")
+              } else {
+
+                User.findById(oldAuthor, (err3, oldUser) => {
+                  if (err3) {
+                    req.flash("error", err3)
+                    res.redirect("/images")
+                  }
+                    const oldUserBalance = oldUser.balance + image.price
+
+                    User.findByIdAndUpdate(oldAuthor, {balance: oldUserBalance}, (err4, res4) => {
+                      if (err4) {
+                        req.flash("error", err4)
+                        res.redirect("/images")
+                      }
+                      req.flash("success", "Successfully purchased image.")
+                      res.redirect("/images")
+                    })
+                })
+              }
+            })
+          }
+        })
+      }
+    })
+
+  })
+
+})
+
+
 router.get("/", middleware.isLoggedIn, function (req, res) {
   // Get all images from DB
-  Image.find(
-    { "author.id": req.user._id },
-    function (err, allImages) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.render("image/images", { images: allImages});
-      }
+  Image.find({ "author.id": req.user._id }, function (err, allImages) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("image/images", { images: allImages });
     }
-  );
+  });
 });
 
 //CREATE - add new image to DB
@@ -84,14 +151,14 @@ router.post(
           id: req.user._id,
           username: req.user.username,
         };
-        var price = req.body.price;
+        // var price = req.body.price;
         var newImage = {
           name: name,
           image: image,
           imageKey: imageKey,
           description: desc,
           author: author,
-          price: price,
+          // price: price,
         };
 
         // Create a new image and save to DB
@@ -127,23 +194,19 @@ router.get("/:id", function (req, res) {
       } else {
         console.log(foundImage);
         //render show template with that image
-        res.render("image/show", { image: foundImage});
+        res.render("image/show", { image: foundImage });
       }
     });
 });
 
 //Edit route
-router.get(
-  "/:id/edit",
-  middleware.checkImageOwnership,
-  function (req, res) {
-    //Check if user is logged in
-    Image.findById(req.params.id, function (err, foundImage) {
-      console.log(foundImage);
-      res.render("image/edit", { image: foundImage});
-    });
-  }
-);
+router.get("/:id/edit", middleware.checkImageOwnership, function (req, res) {
+  //Check if user is logged in
+  Image.findById(req.params.id, function (err, foundImage) {
+    console.log(foundImage);
+    res.render("image/edit", { image: foundImage });
+  });
+});
 
 //Update Route
 router.put("/:id", middleware.checkImageOwnership, function (req, res) {
@@ -180,5 +243,41 @@ router.delete("/:id", middleware.checkImageOwnership, function (req, res) {
     }
   });
 });
+
+
+router.get("/sell/:id", middleware.checkImageOwnership, (req, res) => {
+  Image.findById(req.params.id, (error, foundImage) => {
+    res.render("image/sell", { image: foundImage });
+  });
+});
+
+router.post("/sell/remove/:id", middleware.checkImageOwnership, (req, res) => {
+
+  console.log("THIS ONE HAPPENS")
+
+
+  Image.findByIdAndUpdate(req.params.id, {"forSale": false}, (error, foundImage) => {
+    if (error) res.redirect("/images")
+    res.redirect("/images/market")
+  })
+})
+
+router.post("/sell/:id", middleware.checkImageOwnership, (req, res) => {
+
+  console.log("TRYING TO SELL")
+  console.log(req.body)
+
+  let updatedImage = req.body.image;
+  updatedImage["forSale"] = true;
+  Image.findByIdAndUpdate(
+    req.params.id,
+    updatedImage,
+    (error, foundImage) => {
+      if (error) res.redirect("/images");
+      else res.redirect("/images");
+    }
+  );
+});
+
 
 module.exports = router;

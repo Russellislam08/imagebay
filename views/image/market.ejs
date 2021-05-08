@@ -3,25 +3,24 @@
 <div class="container">
   <header class="jumbotron">
     <div class="container">
-      <h1>Welcome to Image Bay</h1>
-      <p>Upload any images you want to share / download for later use!</p>
-      <p>
-        <a class="btn btn-primary btn-lg" href="/images/new"
-          >Upload an Image</a
-        >
-        <a class="btn btn-primary btn-lg" href="/images/market"
-          >View the Marketplace</a
-        >
-      </p>
+      <h1>Image Bay Marketplace</h1>
     </div>
+      <p>
+        <a class="btn btn-primary btn-lg" href="/images/"
+          >Return to Your Images</a
+        >
+        </p>
   </header>
 
   <div class="row text-center" style="display: flex; flex-wrap: wrap">
-    <% images.forEach(function(image){ %>
+    <% images.forEach(function(image){ if(image.forSale) { %>
     <div class="col-md-3 col-sm-6">
       <div class="thumbnail">
         <img src="<%= image.image %>" />
-        <div class="caption"><h4><%=image.name %></h4></div>
+        <div class="caption">
+            <h4><%=image.name %></h4>
+            <h4> $<%=image.price %> </h4>
+        </div>
         <p>
           <a href="/images/<%=image._id%>" class="btn btn-primary"
             >More Info</a
@@ -29,7 +28,7 @@
         </p>
       </div>
     </div>
-    <% }); %>
+    <% }}); %>
   </div>
 
   <% include ../partials/footer %>

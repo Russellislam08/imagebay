@@ -10,7 +10,9 @@
       <div class="thumbnail">
         <img class="img-responsive" src="<%= image.image %>" />
         <div class="caption-full">
-          <!-- <h4 class="pull-right">$<%= image.price.toFixed(2) %></h4> -->
+          <% if(image.forSale) { %>
+          <h4 class="pull-right">On the market for: $<%= image.price.toFixed(2) %></h4>
+          <% }; %>
           <h4><a><%= image.name %></a></h4>
           <p><%= image.description %></p>
           <p>
@@ -39,46 +41,42 @@
               >Download</a
             >
           </button>
+
+          <hr />
+
+          <% if (!image.forSale) { %>
+          <form
+            id="for-sale-form"
+            action="/images/sell/<%= image._id %>?_method=GET"
+            method="GET"
+          >
+            <button class="btn btn-info">List Image for Sale</button>
+          </form>
+          <% } %>
+
+          <% if (currentUser && image.author.id.equals(currentUser._id) && image.forSale) { %>
+          <form
+            id="for-sale-form"
+            action="/images/sell/remove/<%= image._id %>?_method=POST"
+            method="POST"
+          >
+            <button class="btn btn-info">Remove Image for Sale</button>
+          </form>
+          <% } %>
+          <% } %>
+
+          <%if (currentUser && image.forSale && !(image.author.id.equals(currentUser._id))) { %>
+          <hr />
+          <form
+            id="for-sale-form"
+            action="/images/buy/<%= image._id %>?_method=POST"
+            method="POST"
+          >
+            <button class="btn btn-info">Buy this Image</button>
+          </form>
           <% } %>
         </div>
       </div>
-      <!-- <div class="well">
-        <div class="text-right">
-          <a
-            class="btn btn-success"
-            href="/images/<%= image._id %>/comments/new"
-            >Add New Comment</a
-          >
-        </div>
-        <hr />
-        <% image.comments.forEach(function(comment){ %>
-        <div class="row">
-          <div class="col-md-12">
-            <strong><%= comment.author.username %></strong>
-            <p><%= comment.text %></p>
-            <% if(currentUser && comment.author.id.equals(currentUser._id)) { %>
-            <a
-              class="btn btn-xs btn-warning"
-              href="/images/<%= image._id %>/comments/<%= comment._id %>/edit"
-            >
-              Edit
-            </a>
-            <form
-              class="delete-comment"
-              action="/images/<%= image._id %>/comments/<%= comment._id %>?_method=DELETE"
-              method="POST"
-            >
-              <input
-                class="btn btn-xs btn-danger"
-                type="submit"
-                value="Delete"
-              />
-            </form>
-            <% } %>
-          </div>
-        </div>
-        <% }) %>
-      </div> -->
     </div>
   </div>
 </div>

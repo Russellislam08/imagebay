@@ -12,7 +12,14 @@ var imageSchema = new mongoose.Schema({
     },
     username: String,
   },
-  price: Number,
+  price: {
+    type: Number,
+    default: 0,
+  },
+  forSale: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("image", imageSchema);
