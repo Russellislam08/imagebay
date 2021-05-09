@@ -84,4 +84,5 @@ Once those are all set up, navigate to the root directory of the source code and
 ### Next Steps
 Currently, the platform simply allows you to have an inventory. Although you can purchase images from other users, there is no sense of who the original owner is. I would like to add an NFT system using blockchain where users can view the original uploader, and look at the path the image has taken to be where it is now. This can add a sense of rarity to certain images which would provide a genuine sense of value.
 
-
+### Testing
+There are a few unit tests powered by Jest, specifically testing AWS functionality. Simply run `npm test` to execute the unit tests.
