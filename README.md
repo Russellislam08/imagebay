@@ -7,7 +7,7 @@ This application was made for the Shopify coding challenge for my application. I
 
 
 ### Technologies Used
-The application is built using Node.js. The backend server is created using Express as the web application framework, along with Passport.js for user authentication. EJS is used with HTML and CSS for the frontend. MongoDB is used to store user data along with image metadata. Lastly, Amazon S3 is used to store all uploaded images and binary data.
+The application is built using Node.js. The backend server is created using Express as the web application framework, along with Passport.js for user authentication. EJS is used with HTML and CSS for the frontend. MongoDB is used to store user data along with image metadata and to manage the image marketplace. Lastly, Amazon S3 is used to store all uploaded images and binary data.
 
 ### What It Can Do
 Image Bay currently supports
