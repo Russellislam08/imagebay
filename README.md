@@ -81,6 +81,7 @@ An S3 bucket on AWS is required as well, instructions for that can be found [her
 Once those are all set up, navigate to the root directory of the source code and execute the command `npm install`. This will install all dependencies needed to run the application. Once completed, simply execute `npm start` and the application will begin running. By default, the server listens on port 5000, but this can be easily changed in the `app.js` file, if required
 
 
-
+### Next Steps
+Currently, the platform simply allows you to have an inventory. Although you can purchase images from other users, there is no sense of who the original owner is. I would like to add an NFT system using blockchain where users can view the original uploader, and look at the path the image has taken to be where it is now. This can add a sense of rarity to certain images which would provide a genuine sense of value.
 
 
