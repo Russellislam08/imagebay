@@ -6,6 +6,9 @@ const s3 = new S3(config.get("awsS3"));
 
 // upload file to s3
 function uploadFile(file) {
+
+  if (!file) return null;
+
   const fileStream = fs.createReadStream(file.path);
 
   const uploadParams = {
@@ -22,6 +25,8 @@ exports.uploadFile = uploadFile;
 // delete file from s3
 
 function deleteFile(key) {
+  if (!key) return null;
+
   const deleteParams = {
     Bucket: config.get("s3Bucket"),
     Key: key,
