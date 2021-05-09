@@ -26,6 +26,10 @@ To use it, users simply need to register an account with a username, email and a
 
 ![homepage](screenshots/homepage.png)
 
+Users can upload an image by simply clicking the button to upload an image. This takes the user to a page with a form where they can specify any data. Users can then select any image file from their system to upload to Image Bay.
+
+![upload](screenshots/upload.png)
+
 And after uploading a few images, your dashboard could look something like:
 
 ![withImages](screenshots/withImages.png)
