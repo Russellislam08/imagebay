@@ -13,7 +13,7 @@ The application is built using Node.js. The backend server is created using Expr
 Image Bay currently supports
 - Secure user registration and authentication.
 - Secure image upload. Only the author of the image can view their own images. Images are stored on S3 upon upload.
-- Image CRUD functionality. Users can update images, and remove images. Removing images also removes the image from S3.
+- Complete image CRUD functionality. Users can update images, and remove images. Removing images also removes the image from S3.
 - Buying and selling images
   - Every user starts with $100.
   - A user can choose any of their own images to list on the marketplace for some value. Users may also remove their images from the marketplace, should they require.
@@ -30,7 +30,7 @@ And after uploading a few images, your dashboard could look something like:
 
 ![withImages](screenshots/withImages.png)
 
-You can click on any photo to get more details, and the option to edit, delete, or list the image for sale.
+You can click on any photo to get more details, and the option to edit, delete, or list the image for sale. Let's list our cat image for sale.
 
 ![show](screenshots/show.png)
 
