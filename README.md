@@ -3,7 +3,7 @@
 
 A live version deployed on Heroku can be found [here](https://whispering-bayou-81502.herokuapp.com/)
 
-This application was made for the Shopify coding challenge for my application. It is a web application which allows users to create an account in order to upload images. Users can then list those images on the marketplace in order to sell it, while also being able to purchase images listed by other users. 
+This application was made for the Shopify Fall 2021 Developer coding challenge. It is a web application which allows users to create an account in order to upload images. Users can then list those images on the marketplace in order to sell it, while also being able to purchase images listed by other users. 
 
 
 ### Technologies Used
