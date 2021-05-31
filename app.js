@@ -12,7 +12,6 @@ var express = require("express"),
 
 //Requiring routes
 var imageRoutes = require("./routes/images"),
-  commentRoutes = require("./routes/comments"),
   indexRoutes = require("./routes/index");
 
 var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp_v12";
